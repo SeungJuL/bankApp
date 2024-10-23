@@ -67,7 +67,7 @@ router.post('/withdrawal', async (req, res) => {
             return res.status(400).json(ResponseUtil.failure("Withdrawal amount must be greater than 0", null))
         }
         let afterWithdrawal = accountBalance.rows[0].balance - Number(req.body.amount)
-        if(afterWithdrawal < 0) {
+        if(afterWithdrawal <= 0) {
             return res.status(400).json(ResponseUtil.failure("Withdrawal amount must be smaller than balance", null))
         }
         let withdrawalResult = await client.query('UPDATE bank_accounts SET balance = $1 WHERE fk_user = $2 RETURNING *', [afterWithdrawal, 2])
